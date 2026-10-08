@@ -15,19 +15,19 @@
 
 ## Chip Design Architecture
 
-![Chip Design Architecture](./docs/Architecture.png)
+![Chip Design Architecture](./media/Architecture.png)
 
 *Gambar 1 – Diagram blok rancangan akselerator.*
 
-![Data Flow Diagram](./docs/dfd0_context.png)
+![Data Flow Diagram](./media/dfd0_context.png)
 
 *Gambar 2 – Data Flow Diagram Level 0.*
 
-![Data Flow Diagram](./docs/dfd1_coprocessor.png)
+![Data Flow Diagram](./media/dfd1_coprocessor.png)
 
 *Gambar 3 – Data Flow Diagram Level 1.*
 
-Dokumentasi arsitektur lengkap tersedia di folder [`docs/`](./docs).
+Dokumentasi arsitektur lengkap tersedia di folder [`media/`](./media).
 
 ---
 
@@ -178,9 +178,6 @@ Sintesis logika dan *Place & Route* fisik dieksekusi menggunakan **Intel Quartus
 1. **Efisiensi Logika dan Memori Terpadu:** Penggunaan logika hanya **5,68% ALMs** dan **1,63% RAM blok** jauh di bawah batas toleransi 10% kompetisi. Penghematan BRAM dari estimasi 17 blok menjadi 9 blok tercapai berkat fungsi hashing bijektif `bank_of` yang memadatkan 4 slot ke dalam 4 bank fisik tanpa memori bayangan.
 2. **Optimalisasi Blok DSP:** Implementasi arsitektur *dual-multiplier per PE* (8 modular multiplier fisik) menyerap 16 blok DSP 18x19 (menginferensikan perkalian primer dan perkalian konstanta reduksi Barrett). Angka 16 dari 112 blok DSP (~14%) merupakan trade-off optimal yang mendongkrak throughput PWM hingga lolos target proposal.
 
-#### Log Resmi Quartus Fitter (`mlkem_top.fit.summary`)
-File laporan: [`baseline_system/syn/out/mlkem_top.fit.summary`](./baseline_system/syn/out/mlkem_top.fit.summary)
-
 ```text
 Fitter Status : Successful - Thu Oct 08 19:53:06 2026
 Quartus Prime Version : 18.1.0 Build 625 09/12/2018 SJ Lite Edition
@@ -227,11 +224,8 @@ Pengukuran latensi dilakukan secara siklus-akurat (*cycle-accurate*) membaca reg
   - Worst-case Slow -40°C: **80,46 MHz**.
   - Jalur Register-to-Register internal bersih: **93,12 MHz**.
 - **Diagnostik Jalur Kritis (*Critical Path*):** Jalur kritis berada pada Stage R di dalam `mlkem_ctrl.v` dengan combinational delay $12,43\text{ ns}$:
-  $$\text{FSM State } (\texttt{layer}, \texttt{grp}) \longrightarrow \text{Dynamic Barrel Shifter} \longrightarrow \text{Hash Function } \texttt{bank\_of} \longrightarrow \text{Port Address M10K}$$
+  `FSM State (layer, grp)` → `Dynamic Barrel Shifter` → `Hash Function bank_of` → `Port Address M10K`
 - **Rekomendasi Tahap Lanjutan:** Memisahkan perhitungan parameter layer ke register terpisah pada saat transisi layer serta menyisipkan register pipeline pada `c_raddr` diproyeksikan mereduksi delay menjadi $\approx 4,5\text{ ns}$, mendongkrak $F_{max}$ langsung ke rentang **150–200 MHz**.
-
-#### Cuplikan Laporan TimeQuest Timing Analyzer (`mlkem_top.sta.summary`)
-File laporan: [`baseline_system/syn/out/mlkem_top.sta.summary`](./baseline_system/syn/out/mlkem_top.sta.summary)
 
 ```text
 ------------------------------------------------------------
@@ -346,7 +340,7 @@ Verifikasi fungsional dilakukan secara bertingkat (*multi-tier verification*) un
 ```
 ML-KEM_Unified_Accelerator_DE10Nano/
 ├── README.md                # Dokumentasi utama proyek & laporan teknis
-├── docs/                    # Architecture.png, DFD.png, dan dokumen arsitektur
+├── media/                    # Architecture.png, DFD.png, dan dokumen arsitektur
 ├── model/
 │   └── mlkem_cycle_model.py # Model siklus perangkat keras (analisis konfigurasi C0–C6)
 └── baseline_system/         # Implementasi RTL PoC, testbench, dan skrip sintesis
@@ -376,13 +370,7 @@ ML-KEM_Unified_Accelerator_DE10Nano/
     │   └── mlkem_regs.h     # Header pemetaan register untuk driver Linux HPS
     ├── syn/                 # Skrip sintesis Quartus Prime & batasan pewaktuan SDC
     │   ├── build.tcl        # Skrip otomasi sintesis & fitter Tcl
-    │   ├── mlkem_top.sdc    # Batasan pewaktuan TimeQuest STA
-    │   └── out/             # Laporan sintesis, log, dan bitstream FPGA
-    │       ├── mlkem_top.fit.summary  # Ringkasan utilisasi hardware Fitter
-    │       ├── mlkem_top.sta.summary  # Ringkasan analisis pewaktuan STA
-    │       ├── mlkem_top.flow.rpt     # Laporan alur kompilasi penuh
-    │       ├── worst_paths.txt        # Laporan analisis jalur kritis
-    │       └── mlkem_top.sof          # Bitstream SRAM Object File DE10-Nano
+    │   └── mlkem_top.sdc    # Batasan pewaktuan TimeQuest STA
     └── Makefile             # Otomasi build, pengujian, dan simulasi
 ```
 
