@@ -47,7 +47,7 @@ module mlkem_csr (
     assign slot_d   = slot_r[5:4];
     assign irq      = irq_en & done_q;
 
-    wire is_mem = avs_address[10];
+    wire is_mem = (avs_address[10:9] == 2'b10);   // exactly 0x400..0x5FF (no aliasing)
     assign h_we    = avs_write && is_mem && !busy;
     assign h_re    = avs_read  && is_mem && !busy;
     assign h_slot  = avs_address[8:7];
@@ -66,13 +66,14 @@ module mlkem_csr (
             start <= 1'b0;
             if (done_pulse) begin done_q <= 1'b1; if (err_in) err_q <= 1'b1; end
             // ---- writes
-            if (avs_write && !is_mem) begin
+            if (avs_write && !is_mem && !avs_address[10]) begin
                 case (avs_address[3:0])
-                    4'h1: begin start <= avs_writedata[0]; irq_en <= avs_writedata[1];
+                    4'h1: if (busy) begin if (avs_writedata[0]) err_q <= 1'b1; end   // START while BUSY -> ERR
+                          else begin start <= avs_writedata[0]; irq_en <= avs_writedata[1];
                                 if (avs_writedata[0]) begin done_q <= 1'b0; err_q <= 1'b0; end end
                     4'h2: begin if (avs_writedata[1]) done_q <= 1'b0; if (avs_writedata[2]) err_q <= 1'b0; end
-                    4'h3: op_r   <= avs_writedata[3:0];
-                    4'h4: slot_r <= avs_writedata[5:0];
+                    4'h3: if (busy) err_q <= 1'b1; else op_r   <= avs_writedata[3:0];
+                    4'h4: if (busy) err_q <= 1'b1; else slot_r <= avs_writedata[5:0];
                     default: ;
                 endcase
             end
