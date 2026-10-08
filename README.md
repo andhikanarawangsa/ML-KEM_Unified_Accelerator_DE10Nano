@@ -86,7 +86,7 @@ mlkem_top (Top-Level SoC Avalon-MM Wrapper)
 #### 1. Bank-Centered Scratchpad Memory (`mlkem_scratchpad.v`)
 - **Organisasi Memori:** 4 bank fisik independen, masing-masing berkapasitas 128 kata $\times$ 32-bit (total kapasitas 512 kata 32-bit $\equiv$ 1.024 koefisien 16-bit).
 - **Format Data `Pack32`:** Dua koefisien 12-bit dikemas dalam satu kata 32-bit:
-  $$\text{Word}[31:0] = \{4'\text{b}0, \text{Koefisien}_{\text{ganjil}}[11:0], 4'\text{b}0, \text{Koefisien}_{\text{genap}}[11:0]\}$$
+  `Word[31:0] = {4'b0, Koefisien_ganjil[11:0], 4'b0, Koefisien_genap[11:0]}`
 - **Fungsi Pemetaan Bebas-Konflik (*Conflict-Free Bijection*):**
   Untuk slot polinomial $p \in \{0, 1, 2, 3\}$ dan indeks kata $w \in \{0, \dots, 127\}$:
   $$\text{bank}(p, w) = (p + w[1:0] + w[3:2] + w[5:4] + w[6]) \bmod 4, \quad \text{addr} = w$$
