@@ -1,0 +1,55 @@
+[*]
+[*] GTKWave Configuration - PoC ML-KEM Top Verification
+[*]
+[timestart] 3000000
+[size] 1600 900
+[pos] -1 -1
+*-18.000000 3530000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_top.
+[treeopen] tb_top.dut.
+[treeopen] tb_top.dut.u_ctrl.
+@28
+tb_top.clk
+tb_top.rst_n
+@200
+-
+- HOST INTERFACE
+@28
+tb_top.avs_write
+@22
+tb_top.avs_address[10:0]
+tb_top.avs_writedata[31:0]
+@28
+tb_top.avs_read
+@22
+tb_top.avs_readdata[31:0]
+@28
+tb_top.avs_readdatavalid
+tb_top.irq
+@200
+-
+- CONTROLLER
+@28
+tb_top.dut.start
+tb_top.dut.busy
+@22
+tb_top.dut.op[2:0]
+@28
+tb_top.dut.u_ctrl.st[2:0]
+@22
+tb_top.dut.u_ctrl.layer[2:0]
+tb_top.dut.u_ctrl.grp[5:0]
+@28
+tb_top.dut.done_pulse
+@22
+tb_top.dut.cycles[31:0]
+@200
+-
+- COMPUTE & MEMORY
+@28
+tb_top.dut.core_valid
+tb_top.dut.core_out_valid
+tb_top.dut.c_re[3:0]
+tb_top.dut.c_we[3:0]
+[pattern_trace] 1
+[pattern_trace] 0
