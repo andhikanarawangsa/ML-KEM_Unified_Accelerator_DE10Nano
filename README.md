@@ -15,19 +15,19 @@
 
 ## Chip Design Architecture
 
-![Chip Design Architecture](./docs/Architecture.png)
+![Chip Design Architecture](./media/Architecture.png)
 
 *Gambar 1 – Diagram blok rancangan akselerator.*
 
-![Data Flow Diagram](./docs/dfd0_context.png)
+![Data Flow Diagram](./media/dfd0_context.png)
 
 *Gambar 2 – Data Flow Diagram Level 0.*
 
-![Data Flow Diagram](./docs/dfd1_coprocessor.png)
+![Data Flow Diagram](./media/dfd1_coprocessor.png)
 
 *Gambar 3 – Data Flow Diagram Level 1.*
 
-Dokumentasi arsitektur lengkap tersedia di folder [`docs/`](./docs).
+Dokumentasi arsitektur lengkap tersedia di folder [`media/`](./media).
 
 ---
 
@@ -177,9 +177,6 @@ Sintesis logika dan *Place & Route* fisik dieksekusi menggunakan **Intel Quartus
 ### Analisis Utilisasi Sumber Daya
 1. **Efisiensi Logika dan Memori Terpadu:** Penggunaan logika hanya **5,68% ALMs** dan **1,63% RAM blok** jauh di bawah batas toleransi 10% kompetisi. Penghematan BRAM dari estimasi 17 blok menjadi 9 blok tercapai berkat fungsi hashing bijektif `bank_of` yang memadatkan 4 slot ke dalam 4 bank fisik tanpa memori bayangan.
 2. **Optimalisasi Blok DSP:** Implementasi arsitektur *dual-multiplier per PE* (8 modular multiplier fisik) menyerap 16 blok DSP 18x19 (menginferensikan perkalian primer dan perkalian konstanta reduksi Barrett). Angka 16 dari 112 blok DSP (~14%) merupakan trade-off optimal yang mendongkrak throughput PWM hingga lolos target proposal.
-
-#### Log Resmi Quartus Fitter (`mlkem_top.fit.summary`)
-File laporan: [`baseline_system/syn/out/mlkem_top.fit.summary`](./baseline_system/syn/out/mlkem_top.fit.summary)
 
 ```text
 Fitter Status : Successful - Thu Oct 08 19:53:06 2026
@@ -346,7 +343,7 @@ Verifikasi fungsional dilakukan secara bertingkat (*multi-tier verification*) un
 ```
 ML-KEM_Unified_Accelerator_DE10Nano/
 ├── README.md                # Dokumentasi utama proyek & laporan teknis
-├── docs/                    # Architecture.png, DFD.png, dan dokumen arsitektur
+├── media/                    # Architecture.png, DFD.png, dan dokumen arsitektur
 ├── model/
 │   └── mlkem_cycle_model.py # Model siklus perangkat keras (analisis konfigurasi C0–C6)
 └── baseline_system/         # Implementasi RTL PoC, testbench, dan skrip sintesis
