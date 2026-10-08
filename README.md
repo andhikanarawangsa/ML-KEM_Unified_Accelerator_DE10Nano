@@ -170,8 +170,8 @@ Sintesis logika dan *Place & Route* fisik dieksekusi menggunakan **Intel Quartus
 | :--- | :---: | :---: | :---: | :---: | :---: |
 | **Adaptive Logic Modules (ALMs)** | 3.850 ALMs | **2.381 ALMs** | 41.910 ALMs | **5,68%** | **Sangat Hemat** (-38% dari estimasi) |
 | **Dedicated Logic Registers (FFs)**| 3.200 FFs | **1.341 FFs** | 167.640 FFs | **0,80%** | **Sangat Hemat** (-58% dari estimasi) |
-| **Block RAM (M10K / RAM Blocks)**  | 17 blok M10K | **9 blok RAM** (17.378 bit)| 553 blok | **1,63%** | **Sangat Hemat** (-47% dari estimasi) |
-| **Blok DSP Fisik (18x19)**         | 4 blok DSP | **16 blok DSP** | 112 blok DSP | **14,28%** | **Optimal & Longgar** (Sisa 96 blok) |
+| **Block RAM (M10K / RAM Blocks)**  | 10 blok M10K | **9 blok RAM** (17.378 bit)| 553 blok | **1,63%** | **Sangat Hemat** (-47% dari estimasi) |
+| **Blok DSP Fisik (18x19)**         | 10 blok DSP | **16 blok DSP** | 112 blok DSP | **14,28%** | **Optimal** (Sisa 96 blok) |
 | **I/O Pins (Interkoneksi Avalon)** | — | **81 pin** | 314 pin | **25,80%** | **Sesuai Standar Qsys** |
 
 ### Analisis Utilisasi Sumber Daya
@@ -426,20 +426,6 @@ gtkwave sim/tb_top.vcd sim/mlkem_waveform.gtkw
 ```
 
 ---
-
-## Status Proyek & Rencana Kerja Lanjutan
-
-### Status Pengembangan Saat Ini
-| Tahapan Pengembangan | Status | Keterangan Luaran |
-|---|---|---|
-| Penentuan Arsitektur (*Cycle Model*) | ✅ Selesai | Terpilih konfigurasi optimal C3 (Pack32, 4-bank, 4-PE) |
-| *Golden Model* Matematika FIPS 203 | ✅ Selesai | Referensi bit-akurat Python untuk seluruh operasi cincin |
-| Desain RTL & Optimalisasi Dual-Multiplier | ✅ Selesai | Latensi PWM turun ke 140 siklus, proteksi bus terintegrasi |
-| Verifikasi Regresi *Self-Checking* | ✅ Selesai | 34 dari 34 pengujian lulus (Akurasi 100%) |
-| Sintesis Logika & Fit Fisik Quartus Prime | ✅ Selesai | 2.381 ALM (5,68%), 9 RAM blok (1,63%), 16 DSP (14,28%) |
-| Analisis Pewaktuan Statis (STA) | ✅ Selesai | $F_{max} = 78\text{--}93\text{ MHz}$; bottleneck Stage R teridentifikasi |
-| Integrasi Platform Designer (Qsys) & HPS | 🔄 Tahap Berikutnya | Penyambungan dengan Jembatan HPS-to-FPGA & driver Linux |
-| Pengujian *Hardware-in-the-Loop* (HIL) | 🔄 Tahap Berikutnya | Pengukuran latensi riil & benchmark pada board DE10-Nano |
 
 ### Rencana Bootcamp Tiga Hari (Hardware Deployment)
 - **Hari 1 – Integrasi Bus Avalon-MM & Platform Designer:** Mengintegrasikan IP core ke dalam Intel Platform Designer (Qsys), menghubungkan bridge Avalon-MM HPS-to-FPGA dan interupsi IRQ, serta mengunduh bitstream ke board DE10-Nano.
