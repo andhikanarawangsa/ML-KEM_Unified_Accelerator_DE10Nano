@@ -261,7 +261,7 @@ TNS   : 0.000
 
 Verifikasi eksekusi sistem secara penuh divisualisasikan menggunakan GTKWave melalui penangkapan sinyal dari testbench integrasi Avalon-MM:
 
-![Hasil Simulasi Gelombang Komputasi ML-KEM](./.media/waveform.png)
+![Hasil Simulasi Gelombang Komputasi ML-KEM](./media/waveform.png)
 
 *Gambar 3 – Tangkapan layar bentuk gelombang (waveform) eksekusi komputasi ML-KEM pada GTKWave.*
 
