@@ -1,0 +1,31 @@
+// DFD Level 0 (context diagram) -- Yourdon/DeMarco notation
+// circle = process, box = external entity, arrow = data flow (classic DeMarco: data flows only, no control flows)
+// Layout is pinned (pos = "x,y!" in inches); parallel flows end at invisible points on the circle edge (r = 1.0).
+digraph dfd0 {
+    graph [layout=neato, splines=line, fontname="Helvetica-Bold", fontsize=18, labelloc=t, outputorder=nodesfirst,
+           label="DFD Level 0 - Context Diagram: ML-KEM Unified Polynomial Coprocessor"];
+    node  [fontname="Helvetica", fontsize=14, margin=0.04];
+    edge  [fontname="Helvetica", fontsize=12];
+
+    node [shape=box, style=filled, fillcolor="#e8e8e8", fixedsize=true];
+    hps [label="HPS Driver\nSoftware\n(ARM Cortex-A9)", pos="-4,0!", width=2.4, height=1.5];
+    gic [label="HPS Interrupt\nController (GIC)",      pos="6.6,0!", width=2.2, height=0.9];
+
+    node [shape=circle, style=solid, fillcolor=white, width=2.0, fixedsize=true];
+    p0 [label="0\nML-KEM Unified\nPolynomial\nCoprocessor", pos="1.5,0!"];
+
+    node [shape=point, width=0.01, style=invis];
+    a_h_t [pos="-2.8,0.5!"];  a_h_m [pos="-2.8,0!"];  a_h_b [pos="-2.8,-0.5!"];
+    a_p_t [pos="0.634,0.5!"]; a_p_m [pos="0.5,0!"];   a_p_b [pos="0.634,-0.5!"];
+
+    a_h_t -> a_p_t;
+    a_h_m -> a_p_m;
+    a_p_b -> a_h_b;
+    p0 -> gic;
+
+    node [shape=plaintext, style=solid, width=0, height=0, margin=0, fontsize=12, fixedsize=false];
+    l_t [pos="-1.08,0.67!", label="operation config, input polynomial words"];
+    l_m [pos="-1.08,0.17!", label="start command, DONE/ERR clear"];
+    l_b [pos="-1.08,-0.85!", label="result polynomial words,\nstatus (BUSY, DONE, ERR), CYCLES, ID"];
+    l_i [pos="3.5,0.17!",   label="completion interrupt"];
+}

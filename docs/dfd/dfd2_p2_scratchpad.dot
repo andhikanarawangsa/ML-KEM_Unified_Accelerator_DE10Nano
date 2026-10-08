@@ -1,0 +1,54 @@
+// DFD Level 2 -- process 2.0 Arbitrate & Access Banks (rtl/mlkem_scratchpad.v, mlkem_bank_mem.v, mlkem_bank_fn.vh)
+// Yourdon/DeMarco child diagram: the rounded frame is the boundary of parent process 2.0.
+// Arrows crossing the frame are the parent's flows (balanced with Level 1); source/sink named in the label.
+// Layout is pinned (pos = "x,y!" in inches): nodes, then flow labels (l_*) placed beside their arrows.
+digraph dfd2_p2 {
+    graph [layout=neato, splines=line, fontname="Helvetica-Bold", fontsize=18, labelloc=t, outputorder=nodesfirst,
+           label="DFD Level 2 - Process 2.0 Arbitrate & Access Banks (mlkem_scratchpad.v)"];
+    node  [fontname="Helvetica", fontsize=14, margin=0.04];
+    edge  [fontname="Helvetica", fontsize=12];
+
+    frame [shape=box, style=rounded, color="#999999", label="", pos="3.65,5.15!", width=7.7, height=8.5];
+    title [shape=plaintext, label="2.0 Arbitrate & Access Banks", fontname="Helvetica-Oblique", fontcolor="#555555", pos="5.6,9.1!"];
+
+    node [shape=circle, width=1.4, fixedsize=true];
+    p21 [label="2.1\nMap Host\nAddress",          pos="1.6,8!"];
+    p22 [label="2.2\nSelect Port\nMaster",        pos="4.5,6!"];
+    p23 [label="2.3\nRead/Write\nBanks",          pos="4.5,3.8!"];
+    p24 [label="2.4\nSelect Host\nRead Word",     pos="1.6,3.8!"];
+
+    node [shape=none, width=0, fixedsize=false];
+    b0 [pos="0.9,1.7!",  label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD SIDES="TB">D2.0 &nbsp; Bank_0<BR/>128 x 32b M10K</TD></TR></TABLE>>];
+    b1 [pos="2.75,1.7!", label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD SIDES="TB">D2.1 &nbsp; Bank_1<BR/>128 x 32b M10K</TD></TR></TABLE>>];
+    b2 [pos="4.6,1.7!",  label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD SIDES="TB">D2.2 &nbsp; Bank_2<BR/>128 x 32b M10K</TD></TR></TABLE>>];
+    b3 [pos="6.45,1.7!", label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD SIDES="TB">D2.3 &nbsp; Bank_3<BR/>128 x 32b M10K</TD></TR></TABLE>>];
+
+    node [shape=point, width=0.01, style=invis];
+    i_host [pos="1.6,10.2!"];
+    i_core [pos="9.6,8.6!"];
+    i_sel  [pos="9.6,6!"];
+    o_core [pos="9.6,3.8!"];
+    o_host [pos="-1.6,3.8!"];
+
+    i_host -> p21;
+    p21 -> p22;
+    p21 -> p24;
+    i_core -> p22;
+    i_sel  -> p22;
+    p22 -> p23;
+    p23 -> b0 [dir=both]; p23 -> b1 [dir=both]; p23 -> b2 [dir=both]; p23 -> b3 [dir=both];
+    p23 -> p24;
+    p23 -> o_core;
+    p24 -> o_host;
+
+    node [shape=plaintext, style=solid, width=0, height=0, margin=0, fontsize=12, fixedsize=false];
+    l_host [pos="2.75,9.95!", label="host word access (from 1.0)\n(slot, word, data)"];
+    l_map  [pos="3.9,8.35!",  label="host command: addr = word,\nbank = (slot + w[1:0] + w[3:2]\n+ w[5:4] + w[6]) mod 4"];
+    l_hb   [pos="0.95,5.9!",  label="host bank\nindex"];
+    l_core [pos="7.6,7.05!",  label="core bank commands\n(from 3.0)"];
+    l_sel  [pos="8.4,6.3!",   label="busy status\n(from 3.0)"];
+    l_pb   [pos="5.25,4.9!",  label="per-bank\nread/write"];
+    l_rw   [pos="3.05,4.15!", label="bank read\nwords"];
+    l_core2 [pos="8.5,4.02!", label="bank read words (to 3.0)"];
+    l_ohost [pos="-0.9,4.15!", label="host read word\n(to 1.0)"];
+}

@@ -1,0 +1,92 @@
+// DFD Level 1 -- decomposition of process 0 into blocks a-d of Architecture.png
+// Yourdon/DeMarco: circle = process, box = external entity, two lines = data store,
+// arrow = data flow (classic DeMarco: data flows only, no control flows).
+// Layout is pinned (pos = "x,y!" in inches). Processes with several flows between them sit side by side;
+// those flows start/end at invisible points (a_*) on the circle edge (radius 0.8) so they run as parallel lines.
+digraph dfd1 {
+    graph [layout=neato, splines=line, fontname="Helvetica-Bold", fontsize=18, labelloc=t, outputorder=nodesfirst,
+           label="DFD Level 1 - ML-KEM Unified Polynomial Coprocessor"];
+    node  [fontname="Helvetica", fontsize=14, margin=0.04];
+    edge  [fontname="Helvetica", fontsize=12];
+
+    // external entities
+    node [shape=box, style=filled, fillcolor="#e8e8e8", fixedsize=true];
+    hps [label="HPS Driver\nSoftware\n(ARM Cortex-A9)", pos="-5,5!", width=2.0, height=1.5];
+    gic [label="HPS Interrupt\nController (GIC)",      pos="0,2.0!", width=2.0, height=0.75];
+
+    // processes
+    node [shape=circle, style=solid, fillcolor=white, width=1.6, fixedsize=true];
+    p1 [label="1.0\nHandle Bus\nAccess\n[block a]",                pos="0,5!"];
+    p3 [label="3.0\nSchedule\nOperation\n[block a]",               pos="5,5!"];
+    p2 [label="2.0\nArbitrate &\nAccess Banks\n[block b]",         pos="10,5!"];
+    p4 [label="4.0\nCompute\nPolynomial\nArithmetic\n[block c]",   pos="5,1.8!"];
+
+    // data stores
+    node [shape=none, width=0, fixedsize=false];
+    d1 [pos="2.3,7.3!", label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD SIDES="TB">D1 &nbsp; Control/Status Registers<BR/>(OP, SLOT, IRQ_EN, DONE, ERR)</TD></TR></TABLE>>];
+    d3 [pos="5.6,7.3!", label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD SIDES="TB">D3 &nbsp; Twiddle Factor ROM<BR/>(zeta table) [block d]</TD></TR></TABLE>>];
+    d2 [pos="10,2.2!",  label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"><TR><TD SIDES="TB">D2 &nbsp; Scratchpad Memory<BR/>(Bank_0..Bank_3, 4 poly slots)</TD></TR></TABLE>>];
+
+    // anchor points on box / circle edges (dy = +-0.45 -> dx = 0.661 for r = 0.8)
+    node [shape=point, width=0.01, style=invis];
+    a_h_t [pos="-4,5.45!"];   a_h_m [pos="-4,5!"];    a_h_b [pos="-4,4.55!"];
+    a_1l_t [pos="-0.661,5.45!"]; a_1l_m [pos="-0.8,5!"]; a_1l_b [pos="-0.661,4.55!"];
+    a_1r_t [pos="0.661,5.45!"];  a_1r_m [pos="0.8,5!"];  a_1r_b [pos="0.661,4.55!"];
+    a_3l_t [pos="4.339,5.45!"];  a_3l_m [pos="4.2,5!"];  a_3l_b [pos="4.339,4.55!"];
+    a_3r_t [pos="5.661,5.45!"];  a_3r_m [pos="5.8,5!"];  a_3r_b [pos="5.661,4.55!"];
+    a_2l_t [pos="9.339,5.45!"];  a_2l_m [pos="9.2,5!"];  a_2l_b [pos="9.339,4.55!"];
+    a_3d_l [pos="4.7,4.258!"];   a_3d_r [pos="5.3,4.258!"];
+    a_4u_l [pos="4.7,2.542!"];   a_4u_r [pos="5.3,2.542!"];
+    // 1.0 <-> 2.0 routed over the top
+    a_1u_o [pos="-0.25,5.76!"];  a_1u_i [pos="0.25,5.76!"];
+    a_2u_o [pos="10.25,5.76!"];  a_2u_i [pos="9.75,5.76!"];
+    w_o1 [pos="-0.25,9.2!"]; w_o2 [pos="10.25,9.2!"];
+    w_i1 [pos="0.25,8.7!"];  w_i2 [pos="9.75,8.7!"];
+
+    // HPS <-> 1.0
+    a_h_t  -> a_1l_t;
+    a_h_m  -> a_1l_m;
+    a_1l_b -> a_h_b;
+    // 1.0 -> GIC
+    p1 -> gic;
+    // 1.0 <-> 3.0
+    a_1r_t -> a_3l_t;
+    a_3l_m -> a_1r_m;
+    a_3l_b -> a_1r_b;
+    // 3.0 <-> 2.0
+    a_3r_t -> a_2l_t;
+    a_3r_m -> a_2l_m;
+    a_2l_b -> a_3r_b;
+    // 3.0 <-> 4.0
+    a_3d_l -> a_4u_l;
+    a_4u_r -> a_3d_r;
+    // 1.0 <-> 2.0 (outer: host access to 2.0, inner: read word back)
+    a_1u_o -> w_o1 [arrowhead=none]; w_o1 -> w_o2 [arrowhead=none]; w_o2 -> a_2u_o;
+    a_2u_i -> w_i2 [arrowhead=none]; w_i2 -> w_i1 [arrowhead=none]; w_i1 -> a_1u_i;
+    // stores
+    p1 -> d1 [dir=both];
+    d1 -> p3;
+    d3 -> p3;
+    p2 -> d2 [dir=both];
+
+    // flow labels
+    node [shape=plaintext, style=solid, width=0, height=0, margin=0, fontsize=12, fixedsize=false];
+    l_h_t [pos="-2.33,5.62!", label="operation config, input polynomial words"];
+    l_h_m [pos="-2.33,5.17!", label="start command, DONE/ERR clear"];
+    l_h_b [pos="-2.33,4.2!",  label="result polynomial words,\nstatus, CYCLES, ID"];
+    l_irq [pos="0.35,3.15!",  label="completion\ninterrupt"];
+    l_13t [pos="2.5,5.62!",   label="start command"];
+    l_13m [pos="2.5,5.17!",   label="busy/done/err status"];
+    l_13b [pos="2.5,4.38!",   label="cycle count"];
+    l_32t [pos="7.5,5.62!",   label="bank commands, result words"];
+    l_32m [pos="7.5,5.17!",   label="busy status"];
+    l_32b [pos="7.5,4.38!",   label="bank read words"];
+    l_34l [pos="3.7,3.4!",    label="operand lanes\na,b,c,d,z,\nmode"];
+    l_34r [pos="6.1,3.4!",    label="result lanes\ny0, y1"];
+    l_d1a [pos="0.55,6.75!",  label="config,\nflags"];
+    l_d1b [pos="4.0,6.45!",   label="op, scale_en,\nslots"];
+    l_d3  [pos="6.35,6.4!",   label="twiddle\nfactors"];
+    l_d2  [pos="10.45,3.3!",  label="words"];
+    l_12o [pos="5,9.35!",     label="host word access (slot, word, data)"];
+    l_12i [pos="5,8.85!",     label="host read word"];
+}

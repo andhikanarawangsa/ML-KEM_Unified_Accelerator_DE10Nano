@@ -1,0 +1,33 @@
+// DFD Level 4 -- process 4.1.3 Modular Multiply (rtl/mlkem_modmul.v), Barrett reduction, q = 3329
+// Yourdon/DeMarco child diagram: the rounded frame is the boundary of parent process 4.1.3.
+digraph dfd4_mm {
+    graph [layout=neato, splines=line, fontname="Helvetica-Bold", fontsize=18, labelloc=t, outputorder=nodesfirst,
+           label="DFD Level 4 - Process 4.1.3 Modular Multiply (mlkem_modmul.v)"];
+    node  [fontname="Helvetica", fontsize=14, margin=0.04];
+    edge  [fontname="Helvetica", fontsize=12];
+
+    frame [shape=box, style=rounded, color="#999999", label="", pos="2.6,4.0!", width=5.6, height=6.2];
+    title [shape=plaintext, label="4.1.3 Modular Multiply", fontname="Helvetica-Oblique", fontcolor="#555555", pos="1.1,6.8!"];
+
+    node [shape=circle, width=1.4, fixedsize=true];
+    m1 [label="4.1.3.1\nMultiply\nIntegers",   pos="3,5.8!"];
+    m2 [label="4.1.3.2\nEstimate\nQuotient",   pos="1.2,3.9!"];
+    m3 [label="4.1.3.3\nSubtract &\nCorrect",  pos="3,2.0!"];
+
+    node [shape=point, width=0.01, style=invis];
+    i_xy [pos="3,7.9!"];
+    o_r  [pos="3,0.0!"];
+
+    i_xy -> m1;
+    m1 -> m2;
+    m1 -> m3;
+    m2 -> m3;
+    m3 -> o_r;
+
+    node [shape=plaintext, style=solid, width=0, height=0, margin=0, fontsize=12, fixedsize=false];
+    l_xy [pos="4.2,7.55!", label="x, y (12-bit, < q)\n(from 4.1.2)"];
+    l_p  [pos="1.45,5.15!", label="p = x*y\n(24-bit)"];
+    l_pd [pos="4.0,3.9!",  label="p (delayed\n1 cycle)"];
+    l_qe [pos="1.35,2.65!", label="qe = (p*5039) >> 24"];
+    l_r  [pos="4.3,0.45!", label="r = p - qe*q; if r >= q: r - q\n(to 4.1.5, 4.1.2)"];
+}
