@@ -1,3 +1,33 @@
+# Simulation outputs
 *.vcd
-*.vcd
+sim/*.vvp
+sim/*.vcd
+baseline_system/sim/*.vvp
+baseline_system/sim/*.vcd
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+baseline_system/scripts/__pycache__/
+
+# Contexts directory
 contexts/
+
+# Quartus compilation databases & generated outputs
+db/
+incremental_db/
+baseline_system/syn/out/
+*.rpt
+*.summary
+*.qmsg
+*.jdi
+*.pin
+*.sof
+*.rbf
+*.done
+*.smsg
+*.ddb
+*.cdb
+*.hdb

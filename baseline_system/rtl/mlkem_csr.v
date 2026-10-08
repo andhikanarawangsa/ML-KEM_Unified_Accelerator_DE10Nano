@@ -9,7 +9,7 @@
 //   0x005 CYCLES  RO  cycle count of the last operation
 //   0x400..0x5FF  MEM RW  polynomial window: addr[8:7]=slot, addr[6:0]=word (2 packed coeffs)
 //                     (accessible only while BUSY=0; PoC replacement for the DMA path)
-// Read latency: 1 cycle, signalled with avs_readdatavalid (Avalon pipelined read).
+// Read latency: 2 cycles (registered readdata for timing), signalled with avs_readdatavalid (Avalon pipelined read).
 module mlkem_csr (
     input  wire        clk,
     input  wire        rst_n,
@@ -54,13 +54,17 @@ module mlkem_csr (
     assign h_word  = avs_address[6:0];
     assign h_wdata = avs_writedata;
 
-    reg        rd_mem, rd_blocked;
+    reg        rd_mem, rd_blocked, rd_v1;
     reg [31:0] rd_reg;
+
+    // read mux (stage 1 result) -> registered on avs_readdata (stage 2)
+    wire [31:0] rd_mux = rd_blocked ? 32'hBAD0BAD0 : (rd_mem ? h_rdata : rd_reg);
 
     always @(posedge clk) begin
         if (!rst_n) begin
             start <= 1'b0; irq_en <= 1'b0; done_q <= 1'b0; err_q <= 1'b0;
-            op_r <= 4'd0; slot_r <= 6'd0; avs_readdatavalid <= 1'b0;
+            op_r <= 4'd0; slot_r <= 6'd0; avs_readdatavalid <= 1'b0; rd_v1 <= 1'b0;
+            avs_readdata <= 32'd0;
             rd_mem <= 1'b0; rd_blocked <= 1'b0; rd_reg <= 32'd0;
         end else begin
             start <= 1'b0;
@@ -78,8 +82,10 @@ module mlkem_csr (
                 endcase
             end
             if (avs_write && is_mem && busy) err_q <= 1'b1;   // access violation
-            // ---- reads (1-cycle latency)
-            avs_readdatavalid <= avs_read;
+            // ---- reads (2-cycle latency)
+            rd_v1             <= avs_read;
+            avs_readdatavalid <= rd_v1;
+            avs_readdata      <= rd_mux;
             rd_mem     <= avs_read && is_mem;
             rd_blocked <= avs_read && is_mem && busy;
             case (avs_address[3:0])
@@ -94,9 +100,5 @@ module mlkem_csr (
         end
     end
 
-    always @* begin
-        if (rd_blocked)  avs_readdata = 32'hBAD0BAD0;
-        else if (rd_mem) avs_readdata = h_rdata;
-        else             avs_readdata = rd_reg;
-    end
+
 endmodule

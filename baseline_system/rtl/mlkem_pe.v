@@ -31,7 +31,7 @@ module mlkem_pe (
     // ---- stage S0: operand registers + PWM phase counter ----
     reg        s_act;
     reg [2:0]  s_mode, ph;
-    reg [11:0] ra, rb, rc, rd, rz;
+    (* dont_retime *) reg [11:0] ra, rb, rc, rd, rz;
 
     always @(posedge clk) begin
         if (!rst_n) begin
