@@ -7,7 +7,7 @@
 //   FNTT/INTT : 32 groups/layer x 7 layers, 4 butterflies (2 word-pairs) per cycle
 //   ADD/SUB   : 64 groups, 4 coefficient-pairs per cycle
 //   SCALE     : 64 groups (run after INTT when scale_en)
-//   PWM       : 32 groups x 5 cycles (each PE does 1 base-case product = 5 multiplier slots)
+//   PWM       : 32 groups x 4 cycles (4 beats gather 4 coefficient pairs, then all 4 PEs fire; II = 4)
 //
 // Pipeline:  R (address) -> X (bank data + ROM data, crossbar, PE in_valid) -> PE -> W (write-back)
 `include "mlkem_defs.vh"
@@ -60,7 +60,7 @@ module mlkem_ctrl (
     wire is_scale = (cur_op == `MODE_SCALE);
 
     // ------------------------------------------------------------------ stage R (combinational)
-    wire        issue_en = (st == S_ISSUE) && !(is_pwm && beat == 3'd4);
+    wire        issue_en = (st == S_ISSUE);
 
     wire [2:0]  k   = (cur_op == `MODE_FNTT) ? (3'd7 - layer) : (layer + 3'd1);   // len = 2^k
     wire [2:0]  kk  = (k < 3'd2) ? 3'd2 : k;
@@ -277,8 +277,7 @@ module mlkem_ctrl (
                 end
             end
             S_ISSUE: begin
-                if (is_pwm && beat == 3'd4) begin beat <= 3'd0; grp <= grp + 6'd1; end
-                else if (issue_en) begin
+                if (issue_en) begin
                     if (is_ntt) begin
                         if (grp[4:0] == 5'd31) begin
                             grp <= 6'd0;
@@ -287,7 +286,7 @@ module mlkem_ctrl (
                         end else grp <= grp + 6'd1;
                     end else if (is_pwm) begin
                         if (beat == 3'd3 && grp[4:0] == 5'd31) begin beat <= 3'd0; grp <= 6'd0; st <= S_WAIT_LAST; end
-                        else if (beat == 3'd3) beat <= 3'd4;
+                        else if (beat == 3'd3) begin beat <= 3'd0; grp <= grp + 6'd1; end
                         else beat <= beat + 3'd1;
                     end else begin
                         if (grp == 6'd63) begin grp <= 6'd0; st <= S_WAIT_LAST; end

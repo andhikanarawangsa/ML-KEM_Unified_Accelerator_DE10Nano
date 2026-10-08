@@ -12,7 +12,7 @@ module mlkem_modmul (
 );
     reg [23:0] p1, p2;
     reg [11:0] qe;
-    wire [36:0] pm  = p1 * 13'd5039;
+    (* multstyle = "logic" *) wire [36:0] pm  = p1 * 13'd5039;
     wire [23:0] qeq = ({12'b0,qe} << 12) - ({12'b0,qe} << 9) - ({12'b0,qe} << 8) + qe;
     wire [23:0] rr  = p2 - qeq;
 

@@ -37,7 +37,7 @@ module tb_pe;
                 errors = errors + 1;
                 if (errors < 6) $display("ERR mode %0d: y0=%0d/%0d y1=%0d/%0d", m, y0, e0, y1, e1);
             end
-            if (m == `MODE_PWM && lat != 9)       begin errors = errors + 1; $display("PWM latency %0d", lat); end
+            if (m == `MODE_PWM && lat != 8)       begin errors = errors + 1; $display("PWM latency %0d", lat); end
             if (m != `MODE_PWM && lat != 5)       begin errors = errors + 1; $display("latency %0d", lat); end
             repeat (3) @(negedge clk);
         end
@@ -49,7 +49,7 @@ module tb_pe;
             run(`MODE_FNTT); run(`MODE_INTT); run(`MODE_PWM);
             run(`MODE_ADD);  run(`MODE_SUB);  run(`MODE_SCALE);
         end
-        if (errors == 0) $display("[PASS] PE all modes: %0d ops, latency 5 (PWM 9)", n);
+        if (errors == 0) $display("[PASS] PE all modes: %0d ops, latency 5 (PWM 8)", n);
         else             $display("[FAIL] PE: %0d errors", errors);
         $finish;
     end
