@@ -1,7 +1,7 @@
 # Rancangan Akselerator ML-KEM Berbasis Unit Komputasi Terpadu dan Bank Memori Lokal via Antarmuka Avalon-MM pada SoC FPGA Intel Cyclone V DE10-Nano
 
 ## Chip Hackathon – PERURI Digital Summit 2026
-**Kategori:** IC Chip Design & FPGA Implementation
+**Area Inovasi:** Hardware Cryptography Accelerator
 
 ## Tim RADIX-4
 - Andhika Narawangsa Susilo – Institut Teknologi Bandung – 13222036@mahasiswa.itb.ac.id 
