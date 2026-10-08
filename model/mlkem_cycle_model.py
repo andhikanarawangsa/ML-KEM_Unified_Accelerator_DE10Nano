@@ -24,7 +24,7 @@ F_A9_MHZ = 800.0
 
 # ----------------------------------------------------------------- PARAMETER
 D_PIPE = 6                                              # Kedalaman pipa hardware
-FSM_OVERHEAD = 10                                       # Jeda transisi state machine
+FSM_OVERHEAD = 15                                       # Jeda transisi state machine
 BASEMUL_MULTS = 5                                       # Jumlah perkalian basis PWM/schoolbook
 SW_CYCLES = {"ntt": 15000, "intt": 17000, "pwm": 4000}
 
