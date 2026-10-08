@@ -3,7 +3,7 @@
 ## Chip Hackathon – PERURI Digital Summit 2026
 **Kategori:** IC Chip Design & FPGA Implementation
 
-## Tim NamTIMAPAWOY
+## Tim RADIX-4
 - Andhika Narawangsa Susilo – Institut Teknologi Bandung – 13222036@mahasiswa.itb.ac.id 
 - Rafi Ananta Alden – Institut Teknologi Bandung – 13222087@mahasiswa.itb.ac.id
 - Didan Attaric – Institut Teknologi Bandung – 13222105@mahasiswa.itb.ac.id
