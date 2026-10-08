@@ -224,7 +224,7 @@ Pengukuran latensi dilakukan secara siklus-akurat (*cycle-accurate*) membaca reg
   - Worst-case Slow -40°C: **80,46 MHz**.
   - Jalur Register-to-Register internal bersih: **93,12 MHz**.
 - **Diagnostik Jalur Kritis (*Critical Path*):** Jalur kritis berada pada Stage R di dalam `mlkem_ctrl.v` dengan combinational delay $12,43\text{ ns}$:
-  $$\text{FSM State } (\texttt{layer}, \texttt{grp}) \longrightarrow \text{Dynamic Barrel Shifter} \longrightarrow \text{Hash Function } \texttt{bank\_of} \longrightarrow \text{Port Address M10K}$$
+  `FSM State (layer, grp)` → `Dynamic Barrel Shifter` → `Hash Function bank_of` → `Port Address M10K`
 - **Rekomendasi Tahap Lanjutan:** Memisahkan perhitungan parameter layer ke register terpisah pada saat transisi layer serta menyisipkan register pipeline pada `c_raddr` diproyeksikan mereduksi delay menjadi $\approx 4,5\text{ ns}$, mendongkrak $F_{max}$ langsung ke rentang **150–200 MHz**.
 
 ```text
