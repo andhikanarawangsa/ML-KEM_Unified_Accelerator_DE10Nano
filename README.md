@@ -227,9 +227,6 @@ Pengukuran latensi dilakukan secara siklus-akurat (*cycle-accurate*) membaca reg
   $$\text{FSM State } (\texttt{layer}, \texttt{grp}) \longrightarrow \text{Dynamic Barrel Shifter} \longrightarrow \text{Hash Function } \texttt{bank\_of} \longrightarrow \text{Port Address M10K}$$
 - **Rekomendasi Tahap Lanjutan:** Memisahkan perhitungan parameter layer ke register terpisah pada saat transisi layer serta menyisipkan register pipeline pada `c_raddr` diproyeksikan mereduksi delay menjadi $\approx 4,5\text{ ns}$, mendongkrak $F_{max}$ langsung ke rentang **150–200 MHz**.
 
-#### Cuplikan Laporan TimeQuest Timing Analyzer (`mlkem_top.sta.summary`)
-File laporan: [`baseline_system/syn/out/mlkem_top.sta.summary`](./baseline_system/syn/out/mlkem_top.sta.summary)
-
 ```text
 ------------------------------------------------------------
 Timing Analyzer Summary
@@ -373,13 +370,7 @@ ML-KEM_Unified_Accelerator_DE10Nano/
     │   └── mlkem_regs.h     # Header pemetaan register untuk driver Linux HPS
     ├── syn/                 # Skrip sintesis Quartus Prime & batasan pewaktuan SDC
     │   ├── build.tcl        # Skrip otomasi sintesis & fitter Tcl
-    │   ├── mlkem_top.sdc    # Batasan pewaktuan TimeQuest STA
-    │   └── out/             # Laporan sintesis, log, dan bitstream FPGA
-    │       ├── mlkem_top.fit.summary  # Ringkasan utilisasi hardware Fitter
-    │       ├── mlkem_top.sta.summary  # Ringkasan analisis pewaktuan STA
-    │       ├── mlkem_top.flow.rpt     # Laporan alur kompilasi penuh
-    │       ├── worst_paths.txt        # Laporan analisis jalur kritis
-    │       └── mlkem_top.sof          # Bitstream SRAM Object File DE10-Nano
+    │   └── mlkem_top.sdc    # Batasan pewaktuan TimeQuest STA
     └── Makefile             # Otomasi build, pengujian, dan simulasi
 ```
 
