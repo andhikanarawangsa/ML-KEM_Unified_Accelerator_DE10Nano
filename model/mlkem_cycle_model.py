@@ -1,7 +1,7 @@
 # Model cycle & bandwidth memori untuk akselerator polinomial ML-KEM (q=3329, n=256) pada Cyclone V (DE10-Nano)
 # Chip Hackaton - Peruri Digital Summit 2026
 
-# Tim NamTIMAPAWOY:
+# Tim RADIX-4
 #   - Andhika Narawangsa Susilo – Institut Teknologi Bandung – 13222036@mahasiswa.itb.ac.id 
 #   - Rafi Ananta Alden – Institut Teknologi Bandung – 13222087@mahasiswa.itb.ac.id
 #   - Didan Attaric – Institut Teknologi Bandung – 13222105@mahasiswa.itb.ac.id
