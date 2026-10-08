@@ -19,9 +19,13 @@
 
 *Gambar 1 – Diagram blok rancangan akselerator.*
 
-![Data Flow Diagram](./docs/DFD.png)
+![Data Flow Diagram](./docs/dfd0_context.png)
 
-*Gambar 2 – Data Flow Diagram.*
+*Gambar 2 – Data Flow Diagram Level 0.*
+
+![Data Flow Diagram](./docs/dfd1_coprocessor.png)
+
+*Gambar 3 – Data Flow Diagram Level 1.*
 
 Dokumentasi arsitektur lengkap tersedia di folder [`docs/`](./docs).
 
